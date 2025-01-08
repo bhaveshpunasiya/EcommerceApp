@@ -38,6 +38,6 @@ export const ProfileScreenStyle = StyleSheet.create({
     socialLinksContainer: {
       flexDirection: 'row',
       justifyContent: 'space-evenly',
-      marginBottom: verticalScale(30),
+      marginVertical: verticalScale(30),
     },
   });

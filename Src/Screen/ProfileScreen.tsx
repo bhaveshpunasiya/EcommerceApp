@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import SocialButton from '../Component/SocialButton';
 import ProfileHeader from '../Component/ProfileHeader'; 
 import { moderateScale, verticalScale, horizontalScale } from '../utils/scaling';
 import { ProfileScreenStyle } from '../Style/ProfileScreenStyle';
+import ForwardBtn from '../Component/ForwardBtn';
 
 const ProfileScreen = () => {
   return (
@@ -22,17 +23,25 @@ const ProfileScreen = () => {
           </Text>
         </View>
 
+        <View>
+          <ForwardBtn title="View Order"/>
+          <ForwardBtn title="Address"/>
+          <ForwardBtn title="Help & Support"/>
+        </View>
+
+      
         <View style={ProfileScreenStyle.socialLinksContainer}>
-          <SocialButton text="LinkedIn" gradientColors={['#FF5F6D', '#FFC371']} />
-          <SocialButton text="GitHub" gradientColors={['#FF5F6D', '#FFC371']} />
+          <SocialButton text="FaceBook" gradientColors={['#FF5F6D', '#FFC371']} />
+          <SocialButton text="Insta" gradientColors={['#FF5F6D', '#FFC371']} />
           <SocialButton text="Twitter" gradientColors={['#FF5F6D', '#FFC371']} />
         </View>
 
-        <SocialButton text="Edit Profile" gradientColors={['#FF5F6D', '#FFC371']} />
       </View>
     </View>
   );
 };
+
+
 
 export default ProfileScreen;
 
