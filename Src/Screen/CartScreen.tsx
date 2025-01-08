@@ -19,7 +19,11 @@ const CartScreen = () => {
 
   return (
     <View style={CartScreenStyle.container}>
-      <Text style={CartScreenStyle.title}> Cart</Text>  
+      <TouchableOpacity style={CartScreenStyle.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={24} color="#000" />
+      </TouchableOpacity>
+
+      <Text style={CartScreenStyle.title}> Cart</Text>
       {cartItems.length === 0 ? (
         <Text style={CartScreenStyle.emptyCartText}>No Items!</Text>
       ) : (

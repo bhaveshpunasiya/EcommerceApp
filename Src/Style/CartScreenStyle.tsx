@@ -17,7 +17,6 @@ export const CartScreenStyle = StyleSheet.create({
     title: {
       fontSize: moderateScale(18),
       fontWeight: 'bold',
-      marginBottom: verticalScale(10),
       textAlign: 'center',
     },
     emptyCartText: {
