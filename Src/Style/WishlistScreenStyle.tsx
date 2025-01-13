@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { moderateScale, verticalScale, horizontalScale } from "../utils/scaling";
 
-export const CartScreenStyle = StyleSheet.create({
+export const WishlistScreenStyle = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -18,6 +18,7 @@ export const CartScreenStyle = StyleSheet.create({
       fontSize: moderateScale(18),
       fontWeight: 'bold',
       textAlign: 'center',
+      marginBottom:verticalScale(10)
     },
     emptyCartText: {
       fontSize: moderateScale(16),

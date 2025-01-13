@@ -1,8 +1,9 @@
-import { StyleSheet, Image, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../Screen/HomeScreen';
-import ProfileScreen from '../Screen/ProfileScreen';
+import WishlistScreen from '../Screen/WishlistScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const Tab = createBottomTabNavigator();
 
@@ -12,37 +13,32 @@ const BottomNavigation = () => {
       screenOptions={{
         tabBarLabel: () => null,
         tabBarIcon: ({ focused, size }) => (
-          <Image
-            source={require('../Image/Home.png')}
-            style={{
-              width: size,
-              height: size,
-              tintColor: focused ? 'blue' : 'black',  
-            }}
+          <Ionicons
+            name={focused ? 'home' : 'home-outline'} 
+            size={size}
+            color={focused ? 'blue' : 'black'}
           />
         ),
       }}
     >
       <Tab.Screen
-       options={{
+        options={{
           headerShown: false,
         }}
-         name="HomeScreen" component={HomeScreen} />
-      
+        name="HomeScreen"
+        component={HomeScreen}
+      />
+
       <Tab.Screen
-       
-        name="ProfileScreen" 
-        component={ProfileScreen} 
+        name="WishlistScreen"
+        component={WishlistScreen}
         options={{
-            headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ focused, size }) => (
-            <Image
-              source={require('../Image/Profile.png')}  
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? 'blue' : 'gray', 
-              }}
+            <Ionicons
+              name={focused ? 'heart' : 'heart-outline'} 
+              size={size}
+              color={focused ? 'blue' : 'gray'}
             />
           ),
         }}
@@ -54,4 +50,3 @@ const BottomNavigation = () => {
 export default BottomNavigation;
 
 const styles = StyleSheet.create({});
-

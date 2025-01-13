@@ -4,22 +4,24 @@ import LinearGradient from 'react-native-linear-gradient';
 import { StyleSheet } from 'react-native';
 import { horizontalScale, verticalScale, moderateScale } from '../utils/scaling';
 
-interface RenderCartItemProps {
+interface RenderWishlistItemProps {
   item: any;
   onRemove: (itemId: number) => void;
 }
 
-const RenderCartItem: React.FC<RenderCartItemProps> = ({ item, onRemove }) => {
+const RenderWishlistItem: React.FC<RenderWishlistItemProps> = ({ item, onRemove }) => {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <Image source={{ uri: item?.avatar }} style={styles.image} />
       <View style={styles.itemDetails}>
-        <Text style={styles.productName}>{item?.title}</Text>
-        <Text style={styles.productPrice}>Mrp: ₹{item?.price.toFixed(2)}</Text>
+        <Text style={styles.userName}>
+          {item?.first_name} {item?.last_name}
+        </Text>
+        <Text style={styles.userEmail}>{item?.email}</Text>
       </View>
-      <TouchableOpacity style={styles.removeButton} onPress={() => onRemove(item.id)}>
+      <TouchableOpacity style={styles.removeButton} onPress={() => onRemove(item?.id)}>
         <LinearGradient colors={['#FF6347', '#FF4500']} style={styles.gradientBorder}>
-          <Text style={styles.buttonText}>Remove</Text>
+          <Text style={styles.buttonText}>Remove</Text> 
         </LinearGradient>
       </TouchableOpacity>
     </View>
@@ -32,29 +34,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: moderateScale(8),
-    padding: moderateScale(10),
+    paddingHorizontal: moderateScale(10),
     marginVertical: verticalScale(5),
     elevation: 3,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
+    paddingVertical:10
   },
   image: {
     width: horizontalScale(80),
-    height: verticalScale(80),
+    height: verticalScale(50),
     resizeMode: 'contain',
     marginRight: moderateScale(10),
   },
   itemDetails: {
     flex: 1,
   },
-  productName: {
+  userName: {
     fontSize: moderateScale(14),
     fontWeight: 'bold',
     marginBottom: verticalScale(4),
   },
-  productPrice: {
+  userEmail: {
     fontSize: moderateScale(14),
     color: '#777',
   },
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RenderCartItem;
+export default RenderWishlistItem;

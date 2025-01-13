@@ -1,23 +1,28 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { horizontalScale, verticalScale, moderateScale } from '../utils/scaling';
 
-const ProductCard = ({ item, inCart, onAddToCart }: any) => {
+const ProductCard = ({ item, isLiked, onLikeToggle }: any) => {
   return (
     <View style={styles.card}>
       <View style={{ flex: 1 }}>
-        <Image source={{ uri: item.image }} style={styles.image} />
-        <Text style={styles.productName}>{item?.title}</Text>
-        <View style={styles.priceRatingContainer}>
-          <Text style={styles.productPrice}>Mrp: ₹{item?.price.toFixed(2)}</Text>
-          <Text style={styles.productRating}>⭐ {item?.rating?.rate}</Text>
-        </View>
-        <Text style={styles.productCategory}>Category: {item?.category}</Text>
+        <ImageBackground source={{ uri: item.avatar }} style={styles.image}>
+          <TouchableOpacity style={styles.likeButton} onPress={() => onLikeToggle(item)}>
+            <Icon
+              name={isLiked ? 'heart' : 'heart-outline'}
+              size={moderateScale(24)}
+              color={isLiked ? 'red' : '#black'}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
+        <Text style={styles.userName}>
+          {item?.first_name} {item?.last_name}
+        </Text>
+        <Text style={styles.userEmail}>{item?.email}</Text>
       </View>
-      <View>
-        <TouchableOpacity style={styles.button} onPress={() => onAddToCart(item)}>
-          <Text style={styles.buttonText}>{inCart ? 'Remove from Cart' : 'Add to Cart'}</Text>
-        </TouchableOpacity>
+
+      <View style={styles.buttonContainer}>
       </View>
     </View>
   );
@@ -35,34 +40,27 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
+    position: 'relative', // Ensure that the card is positioned relatively for absolute positioning of the like icon
   },
   image: {
     width: '100%',
-    height: verticalScale(120),
-    resizeMode: 'contain',
-    marginBottom: moderateScale(8),
+    height: verticalScale(120), // Adjusted to make the image container a bit taller
+    resizeMode: 'cover',
   },
-  productName: {
+  userName: {
     fontSize: moderateScale(14),
     fontWeight: '600',
     marginBottom: verticalScale(4),
   },
-  productPrice: {
-    fontSize: moderateScale(14),
-    fontWeight: '500',
-    marginBottom: verticalScale(8),
-  },
-  productCategory: {
+  userEmail: {
     fontSize: moderateScale(12),
     color: '#777',
-    marginBottom: verticalScale(4),
-  },
-  productRating: {
-    fontSize: moderateScale(12),
-    color: '#888',
     marginBottom: verticalScale(8),
-    marginLeft: horizontalScale(10),
-    textAlign: 'right',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: verticalScale(10),
   },
   button: {
     backgroundColor: '#f0f0f0',
@@ -70,16 +68,22 @@ const styles = StyleSheet.create({
     paddingVertical: moderateScale(8),
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
+    marginRight: moderateScale(5),
   },
   buttonText: {
     fontSize: moderateScale(12),
     fontWeight: '600',
   },
-  priceRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginBottom: verticalScale(8),
+  likeButton: {
+    position: 'absolute',
+    right: moderateScale(-5), 
+    backgroundColor: '#fff',  
+    borderRadius: moderateScale(20),
+    padding: moderateScale(5), 
+    borderTopRightRadius:0,
+    borderTopLeftRadius:0,
+    borderBottomEndRadius:0
   },
 });
 

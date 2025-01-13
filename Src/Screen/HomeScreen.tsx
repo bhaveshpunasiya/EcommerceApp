@@ -7,69 +7,79 @@ import ProductCard from '../Component/ProductCard';
 import CartHeader from '../Component/CartHeader';
 import { HomeScreenstyle } from '../Style/HomeScreenstyle';
 import { useNavigation } from '@react-navigation/native';
-import { addItem, decrementItem } from './Store/Slice/cartSlice';
+
 import ActivityIndicatorComman from '../Component/ActivityIndicatorComman';
+import { addItemToWishlist, removeItemFromWishlist } from './Store/Slice/wishlistSlice';
 
 const HomeScreen = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // Pull-to-refresh state
-  const cartItems = useSelector((state: any) => state.cart.items);
+  const [page, setPage] = useState(1); // Current page number
+  const [hasMore, setHasMore] = useState(true); // Whether more data is available
+  const wishlistItems = useSelector((state: any) => state.wishlist.items);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(page);
+  }, [page]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page: number) => {
     try {
-      setLoading(true);
-      const data = await request('https://fakestoreapi.com/products');
-      setProducts(data);
+      if (!loading) setLoading(true);
+      const data = await request(`https://reqres.in/api/users?page=${page}`);
+      if (page === 1) {
+        setProducts(data.data);
+      } else {
+        setProducts((prev) => [...prev, ...data.data]);
+      }
+      setHasMore(page < data.total_pages);
     } catch (error) {
-      ToastAndroid.show(error?.message,10)
+      ToastAndroid.show(error?.message, ToastAndroid.LONG);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      const data = await request('https://fakestoreapi.com/products');
-      setProducts(data);
-    } catch (error) {
-      ToastAndroid.show(error?.message,10)
-    } finally {
       setRefreshing(false);
     }
   };
 
-  const addToCart = (item: any) => {
-    dispatch(addItem(item));
-    ToastAndroid.show("Add In Cart",10)
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(1);
+    setHasMore(true);
   };
 
-  const removeFromCart = (itemId: number) => {
-    dispatch(decrementItem(itemId));
+  const handleLoadMore = () => {
+    if (hasMore && !loading) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
-  const isInCart = (itemId: number) => {
-    return cartItems.some((item: any) => item.id === itemId);
+  const addToWishlist = (item: any) => {
+    dispatch(addItemToWishlist(item));
+    ToastAndroid.show('Added to Wishlist', ToastAndroid.SHORT);
+  };
+
+  const removeFromWishlist = (itemId: number) => {
+    dispatch(removeItemFromWishlist(itemId));
+  };
+
+  const isInWishlist = (itemId: number) => {
+    return wishlistItems.some((item: any) => item.id === itemId);
   };
 
   const renderProduct = ({ item }: { item: any }) => {
-    const inCart = isInCart(item.id);
+    const inWishlist = isInWishlist(item.id);
+
     return (
       <ProductCard
         item={item}
-        inCart={inCart}
-        onAddToCart={(item) => {
-          if (inCart) {
-            removeFromCart(item.id);
+        isLiked={inWishlist}
+        onLikeToggle={(item) => {
+          if (inWishlist) {
+            removeFromWishlist(item?.id);
           } else {
-            addToCart(item);
+            addToWishlist(item);
           }
         }}
       />
@@ -79,22 +89,21 @@ const HomeScreen = () => {
   return (
     <View style={HomeScreenstyle.container}>
       <CartHeader
-        onPress={() => navigation.navigate('CartScreen')}
         title="HOME"
-        cartCount={cartItems?.length}
+        cartCount={wishlistItems?.length}
       />
-      {loading ? (
- <ActivityIndicatorComman  />      ) : (
-        <FlatList
-          data={products}
-          renderItem={renderProduct}
-          keyExtractor={(item,index) => index.toString()}
-          numColumns={2}
-          contentContainerStyle={HomeScreenstyle.list}
-          refreshing={refreshing} 
-          onRefresh={handleRefresh} 
-        />
-      )}
+      <FlatList
+        data={products}
+        renderItem={renderProduct}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+        contentContainerStyle={HomeScreenstyle.list}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loading && <ActivityIndicatorComman/>}
+      />
     </View>
   );
 };

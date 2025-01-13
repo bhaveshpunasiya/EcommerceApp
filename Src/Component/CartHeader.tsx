@@ -9,10 +9,6 @@ const CartHeader = ({ cartCount,onPress ,title}: any) => {
       {
         title ? <Text style={styles.Header}>{title}</Text> : null
       }
-      <TouchableOpacity style={styles.cartIconContainer} onPress={onPress} >
-        <Image source={require('../Image/cart.png')} style={styles.logo} />
-        <Text style={styles.cartCount}>{cartCount}</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -20,11 +16,10 @@ const CartHeader = ({ cartCount,onPress ,title}: any) => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderBottomColor: '#ddd',
-    marginHorizontal: 10,
+    marginHorizontal:horizontalScale(10),
   },
   logo: {
     width: horizontalScale(40),
@@ -32,7 +27,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   logo1: {
-    width: horizontalScale(60),
+    width: horizontalScale(50),
     height: verticalScale(50),
     resizeMode: 'contain',
   },
@@ -58,6 +53,9 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(24),
     fontWeight: '600',
     marginBottom: verticalScale(4),
+    flex:1,
+    textAlign:"center",
+    marginRight:horizontalScale(50)
   }
 });
 
